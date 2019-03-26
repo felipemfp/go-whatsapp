@@ -87,8 +87,8 @@ type Conn struct {
 	Store          *Store
 	ServerLastSeen time.Time
 
-	longClientName  string
-	shortClientName string
+	LongClientName  string
+	ShortClientName string
 }
 
 type websocketWrapper struct {
@@ -102,6 +102,11 @@ type listenerWrapper struct {
 	m map[string]chan string
 }
 
+var (
+	DefaultLongClientName = "github.com/rhymen/go-whatsapp"
+	DefaultShortClientName = "go-whatsapp"
+)
+
 /*
 Creates a new connection with a given timeout. The websocket connection to the WhatsAppWeb servers get´s established.
 The goroutine for handling incoming messages is started
@@ -113,8 +118,8 @@ func NewConn(timeout time.Duration) (*Conn, error) {
 		msgTimeout: timeout,
 		Store:      newStore(),
 
-		longClientName:  "github.com/rhymen/go-whatsapp",
-		shortClientName: "go-whatsapp",
+		LongClientName:  DefaultLongClientName,
+		ShortClientName: DefaultShortClientName,
 	}
 	return wac, wac.connect()
 }

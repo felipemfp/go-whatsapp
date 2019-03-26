@@ -93,7 +93,7 @@ func (wac *Conn) SetClientName(long, short string) error {
 	if wac.session != nil && (wac.session.EncKey != nil || wac.session.MacKey != nil) {
 		return fmt.Errorf("cannot change client name after logging in")
 	}
-	wac.longClientName, wac.shortClientName = long, short
+	wac.LongClientName, wac.ShortClientName = long, short
 	return nil
 }
 
@@ -149,7 +149,7 @@ func (wac *Conn) Login(qrChan chan<- string) (Session, error) {
 
 	session.ClientId = base64.StdEncoding.EncodeToString(clientId)
 	//oldVersion=8691
-	login := []interface{}{"admin", "init", []int{0, 3, 225}, []string{wac.longClientName, wac.shortClientName}, session.ClientId, true}
+	login := []interface{}{"admin", "init", []int{0, 3, 225}, []string{wac.LongClientName, wac.ShortClientName}, session.ClientId, true}
 	loginChan, err := wac.writeJson(login)
 	if err != nil {
 		return session, fmt.Errorf("error writing login: %v\n", err)
@@ -303,7 +303,7 @@ func (wac *Conn) Restore() error {
 	wac.listener.Unlock()
 
 	//admin init
-	init := []interface{}{"admin", "init", []int{0, 3, 225}, []string{wac.longClientName, wac.shortClientName}, wac.session.ClientId, true}
+	init := []interface{}{"admin", "init", []int{0, 3, 225}, []string{wac.LongClientName, wac.ShortClientName}, wac.session.ClientId, true}
 	initChan, err := wac.writeJson(init)
 	if err != nil {
 		return fmt.Errorf("error writing admin init: %v\n", err)
